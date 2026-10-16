@@ -1,0 +1,533 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rainwater Harvesting System</title>
+
+    <style>
+        /* GENERAL DESIGN */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f8f5;
+            color: #20352e;
+        }
+
+        /* NAVIGATION BAR */
+        nav {
+            background: #075b4c;
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        nav h2 {
+            font-size: 23px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 18px;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            color: #a7f3d0;
+        }
+
+        /* HOME SECTION */
+        .hero {
+            background: linear-gradient(120deg, #0789a0, #075b4c);
+            color: white;
+            text-align: center;
+            padding: 75px 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(30px, 5vw, 46px);
+            margin-bottom: 18px;
+        }
+
+        .hero p {
+            max-width: 650px;
+            margin: 0 auto 25px;
+            line-height: 1.8;
+            font-size: 17px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 13px 24px;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .hero .btn {
+            background: #d9f99d;
+            color: #075b4c;
+        }
+
+        .btn:hover {
+            opacity: 0.85;
+        }
+
+        /* GENERAL SECTION */
+        section {
+            padding: 55px 7%;
+            scroll-margin-top: 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            color: #075b4c;
+            font-size: 30px;
+            margin-bottom: 30px;
+        }
+
+        /* CALCULATOR */
+        .calculator {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 25px;
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .card {
+            background: white;
+            padding: 28px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px #0000000d;
+        }
+
+        .card h3 {
+            color: #087f6b;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin: 17px 0 8px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5d1;
+            border-radius: 7px;
+            font-size: 16px;
+            background: white;
+        }
+
+        input:focus, select:focus {
+            outline: 2px solid #0d9488;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            background: #087f6b;
+            color: white;
+            margin-top: 24px;
+        }
+
+        .reset-btn {
+            width: 100%;
+            margin-top: 10px;
+            background: #e1f5ec;
+            color: #075b4c;
+        }
+
+        /* RESULTS */
+        .result {
+            padding: 18px;
+            background: #e6f7ef;
+            border-left: 5px solid #0d9488;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .result p {
+            color: #426258;
+            margin-bottom: 5px;
+        }
+
+        .result h2 {
+            color: #075b4c;
+            font-size: 28px;
+            overflow-wrap: anywhere;
+        }
+
+        .formula {
+            background: #effaf6;
+            border-radius: 8px;
+            padding: 15px;
+            line-height: 1.8;
+            font-size: 14px;
+        }
+
+        #error {
+            color: #b91c1c;
+            margin-top: 12px;
+            font-size: 14px;
+        }
+
+        /* INFORMATION CARDS */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px #0000000d;
+        }
+
+        .feature-card .icon {
+            font-size: 38px;
+        }
+
+        .feature-card h3 {
+            color: #087f6b;
+            margin: 12px 0;
+        }
+
+        .feature-card p {
+            line-height: 1.7;
+            color: #53675e;
+        }
+
+        /* HOW IT WORKS */
+        .steps {
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .steps p {
+            background: white;
+            padding: 17px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #087f6b;
+        }
+
+        /* FOOTER */
+        footer {
+            background: #064e3b;
+            color: white;
+            text-align: center;
+            padding: 25px 15px;
+            line-height: 1.8;
+        }
+
+        /* MOBILE RESPONSIVE */
+        @media (max-width: 750px) {
+            nav {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            nav a {
+                margin: 0 6px;
+                font-size: 14px;
+            }
+
+            .calculator,
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            section {
+                padding: 40px 5%;
+            }
+
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVIGATION -->
+    <nav>
+        <h2>💧 AquaSave</h2>
+
+        <div>
+            <a href="#home">Home</a>
+            <a href="#calculator">Calculator</a>
+            <a href="#benefits">Benefits</a>
+            <a href="#how">How It Works</a>
+        </div>
+    </nav>
+
+    <!-- HOME PAGE SECTION -->
+    <header class="hero" id="home">
+        <h1>Rainwater Harvesting Calculator</h1>
+
+        <p>
+            Save Water, Save Life! Discover how much rainwater
+            your rooftop can collect and help protect our environment.
+        </p>
+
+        <a href="#calculator" class="btn">
+            Start Calculation ↓
+        </a>
+    </header>
+
+    <!-- CALCULATOR SECTION -->
+    <section id="calculator">
+        <h2 class="section-title">Calculate Rainwater Collection</h2>
+
+        <div class="calculator">
+
+            <!-- INPUTS -->
+            <div class="card">
+                <h3>🏠 Enter Your Details</h3>
+
+                <form id="rainForm">
+                    <label for="roof">Roof Area (m²)</label>
+
+                    <input
+                        type="number"
+                        id="roof"
+                        min="0.01"
+                        step="any"
+                        value="100"
+                        required
+                    >
+
+                    <label for="rainfall">
+                        Average Annual Rainfall (mm)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="rainfall"
+                        min="0"
+                        step="any"
+                        value="850"
+                        required
+                    >
+
+                    <label for="efficiency">
+                        Collection Efficiency
+                    </label>
+
+                    <select id="efficiency">
+                        <option value="0.60">60%</option>
+                        <option value="0.70">70%</option>
+                        <option value="0.80" selected>80%</option>
+                        <option value="0.90">90%</option>
+                    </select>
+
+                    <button type="submit" class="btn calculate-btn">
+                        Calculate Water
+                    </button>
+
+                    <button type="reset" class="btn reset-btn">
+                        Reset Calculator
+                    </button>
+
+                    <p id="error" role="alert"></p>
+                </form>
+            </div>
+
+            <!-- OUTPUTS -->
+            <div class="card">
+                <h3>📊 Estimated Water Collection</h3>
+
+                <div class="result">
+                    <p>Yearly Collection</p>
+                    <h2 id="yearly">68,000 litres</h2>
+                </div>
+
+                <div class="result">
+                    <p>Monthly Average</p>
+                    <h2 id="monthly">5,666.67 litres</h2>
+                </div>
+
+                <div class="result">
+                    <p>Daily Average</p>
+                    <h2 id="daily">186.30 litres</h2>
+                </div>
+
+                <div class="formula">
+                    <strong>Formula:</strong><br>
+                    Water collected = Roof area × Rainfall × Efficiency
+
+                    <br><br>
+
+                    <strong>Example:</strong><br>
+                    100 × 850 × 0.80 = 68,000 litres per year
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- BENEFITS SECTION -->
+    <section id="benefits">
+        <h2 class="section-title">Benefits of Rainwater Harvesting</h2>
+
+        <div class="features">
+
+            <div class="feature-card">
+                <div class="icon">💧</div>
+                <h3>Save Water</h3>
+                <p>
+                    Collect rainwater and reduce dependence
+                    on other water sources.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon">🌱</div>
+                <h3>Protect Environment</h3>
+                <p>
+                    Reduce surface runoff and encourage
+                    responsible water conservation.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon">🏡</div>
+                <h3>Household Use</h3>
+                <p>
+                    Properly collected rainwater can be used
+                    for gardening and cleaning.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS SECTION -->
+    <section id="how">
+        <h2 class="section-title">How It Works</h2>
+
+        <div class="steps">
+            <p><strong>Step 1:</strong> Enter your rooftop area.</p>
+            <p><strong>Step 2:</strong> Enter average annual rainfall.</p>
+            <p><strong>Step 3:</strong> Select collection efficiency.</p>
+            <p><strong>Step 4:</strong> Click the Calculate Water button.</p>
+            <p><strong>Step 5:</strong> View the yearly, monthly, and daily estimates.</p>
+        </div>
+
+        <div class="card" style="max-width:800px;margin:25px auto 0;">
+            <h3>💡 Water-Saving Tips</h3>
+            <p>• Keep your roof and gutters clean.</p>
+            <p>• Install suitable filters.</p>
+            <p>• Use a covered storage tank.</p>
+            <p>• Inspect pipes regularly.</p>
+            <p>• Treat and test rainwater appropriately for its intended use.</p>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <h3>💧 AquaSave - Rainwater Harvesting Project</h3>
+        <p>Save Water, Save Life!</p>
+        <p>Educational Web Development Project</p>
+        <p>© 2026 AquaSave</p>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        const form = document.getElementById("rainForm");
+
+        // Calculate water when the user clicks the button
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const roofText = document.getElementById("roof").value;
+            const rainfallText = document.getElementById("rainfall").value;
+
+            const roof = Number(roofText);
+            const rainfall = Number(rainfallText);
+            const efficiency = Number(
+                document.getElementById("efficiency").value
+            );
+
+            const error = document.getElementById("error");
+
+            // Validate user input
+            if (
+                roofText.trim() === "" ||
+                rainfallText.trim() === "" ||
+                !Number.isFinite(roof) ||
+                !Number.isFinite(rainfall) ||
+                roof <= 0 ||
+                rainfall < 0
+            ) {
+                error.textContent =
+                    "Please enter a valid roof area and rainfall.";
+                return;
+            }
+
+            error.textContent = "";
+
+            // Calculate estimated water in litres
+            const yearly = roof * rainfall * efficiency;
+            const monthly = yearly / 12;
+            const daily = yearly / 365;
+
+            // Display the results
+            document.getElementById("yearly").textContent =
+                yearly.toLocaleString("en-IN", {
+                    maximumFractionDigits: 2
+                }) + " litres";
+
+            document.getElementById("monthly").textContent =
+                monthly.toLocaleString("en-IN", {
+                    maximumFractionDigits: 2
+                }) + " litres";
+
+            document.getElementById("daily").textContent =
+                daily.toLocaleString("en-IN", {
+                    maximumFractionDigits: 2
+                }) + " litres";
+        });
+
+        // Reset the results to the default example
+        form.addEventListener("reset", function() {
+            document.getElementById("error").textContent = "";
+
+            document.getElementById("yearly").textContent =
+                "68,000 litres";
+
+            document.getElementById("monthly").textContent =
+                "5,666.67 litres";
+
+            document.getElementById("daily").textContent =
+                "186.30 litres";
+        });
+    </script>
+
+</body>
+</html>

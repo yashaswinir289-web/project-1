@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Digital Clock</title>
+
+    <style>
+        body {
+            background-color: rgb(230, 74, 152);
+            text-align: center;
+            font-family: Arial, sans-serif;
+            
+        }
+
+        .clock {
+            margin-top: 150px;
+            border color: black;
+        }
+
+        h1 {
+            color: #475569;
+        }
+
+        #time {
+            font-size: 200px;
+            color: #e0bade;
+            background-color: rgb(191, 54, 150);
+            padding: 30px;
+            display: ruby-text-container;
+            border-radius: 30px;
+            display : flex;
+            justify-content: center;
+         }
+    </style>
+</head>
+
+<body>
+    <div class="clock">
+        <h1>Digital Clock</h1>
+        <div id="time">00:00:00 PM</div>
+    </div>
+
+    <script>
+        function showTime() {
+            let date = new Date();
+            let time = date.toLocaleTimeString('en-US');
+            document.getElementById("time").innerHTML = time;
+        }
+
+        setInterval(showTime, 1000);
+        showTime();
+    </script>
+</body>
+</html>

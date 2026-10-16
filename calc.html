@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone Calculator</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 4;
+            min-height: 50vh;
+            display: flex;
+            justify-content:center;
+            align-items: center;
+            background: linear-gradient(135deg, #220543, #34344a);
+            font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        }
+
+        .calculator {
+            width:380px;
+            max-width: 95vw;
+            padding: 25px 18px;
+            background: #bacae1;
+            border-radius: 100px;
+            box-shadow: 0 15px 40px rgba(12, 154, 231, 0.5);
+            border-width: 8px;
+            justify-content: center;
+
+        }
+
+        .top {
+            color: rgb(237, 48, 48);
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 25px;
+            letter-spacing: 2px;
+            justify-content: center;
+        }
+
+        .display {
+            height: 145px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: flex-end;
+            padding: 10px 5px 25px;
+            overflow: hidden;
+        }
+
+        #history {
+            color: #888;
+            font-size: 18px;
+            min-height: 25px;
+            margin-bottom: 10px;
+        }
+
+        #result {
+            width: 100%;
+            color: white;
+            font-size: 48px;
+            text-align: right;
+            border: none;
+            outline: none;
+            background: transparent;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        button {
+            height: 65px;
+            width: 100%;
+            border: none;
+            border-radius: 50%;
+            background: #333333;
+            color: white;
+            font-size: 23px;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+
+        button:hover {
+            filter: brightness(1.3);
+        }
+
+        button:active {
+            transform: scale(0.92);
+        }
+
+        .utility {
+            background: #a5a5a5;
+            color: #171717;
+        }
+
+        .operator, .equal {
+            background: #ff9500;
+            color: white;
+        }
+
+        .zero {
+            grid-column: span 2;
+            border-radius: 40px;
+            text-align: left;
+            padding-left: 28px;
+        }
+
+        .footer {
+            color: #666;
+            text-align: center;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="calculator">
+
+        <div class="top"></div>
+        <h1>CALCULATOR</h1>
+ 
+        <div class="display">
+            <div id="history"></div>
+            <input type="text" id="result"
+                   value="0" readonly>
+        </div>
+
+        <div class="buttons">
+            <button class="utility" onclick="clearAll()">AC</button>
+            <button class="utility" onclick="toggleSign()">+/−</button>
+            <button class="utility" onclick="percentage()">%</button>
+            <button class="operator" onclick="chooseOperator('/')">÷</button>
+
+            <button onclick="addNumber('7')">7</button>
+            <button onclick="addNumber('8')">8</button>
+            <button onclick="addNumber('9')">9</button>
+            <button class="operator" onclick="chooseOperator('*')">×</button>
+
+            <button onclick="addNumber('4')">4</button>
+            <button onclick="addNumber('5')">5</button>
+            <button onclick="addNumber('6')">6</button>
+            <button class="operator" onclick="chooseOperator('-')">−</button>
+
+            <button onclick="addNumber('1')">1</button>
+            <button onclick="addNumber('2')">2</button>
+            <button onclick="addNumber('3')">3</button>
+            <button class="operator" onclick="chooseOperator('+')">+</button>
+
+            <button class="utility" onclick="deleteLast()">⌫</button>
+            <button class="zero" onclick="addNumber('0')">0</button>
+            <button onclick="addDecimal()">.</button>
+            <button class="equal" onclick="calculate()">=</button>
+        </div>
+
+        <div class="footer">Simple • Smart • Fast</div>
+
+    </div>
+
+    <script>
+        let current = "0";
+        let previous = null;
+        let operator = null;
+        let newNumber = false;
+
+        function updateDisplay() {
+            document.getElementById("result").value = current;
+        }
+
+        function addNumber(number) {
+            if (current === "Error" || newNumber) {
+                current = number;
+                newNumber = false;
+            } else if (current === "0") {
+                current = number;
+            } else if (current.replace("-", "").length < 14) {
+                current += number;
+            }
+
+            updateDisplay();
+        }
+
+        function addDecimal() {
+            if (current === "Error" || newNumber) {
+                current = "0.";
+                newNumber = false;
+            } else if (!current.includes(".")) {
+                current += ".";
+            }
+
+            updateDisplay();
+        }
+
+        function chooseOperator(op) {
+            if (current === "Error") return;
+
+            if (operator && !newNumber) {
+                calculate();
+            }
+
+            previous = Number(current);
+            operator = op;
+            newNumber = true;
+
+            document.getElementById("history").textContent =
+                format(previous) + " " + symbol(op);
+
+            updateDisplay();
+        }
+
+        function calculate() {
+            if (operator === null || previous === null ||
+                current === "Error") return;
+
+            let a = previous;
+            let b = Number(current);
+            let answer;
+
+            if (operator === "+") answer = a + b;
+            else if (operator === "-") answer = a - b;
+            else if (operator === "*") answer = a * b;
+            else if (operator === "/") {
+                if (b === 0) {
+                    current = "Error";
+                    document.getElementById("history").textContent =
+                        "Cannot divide by zero";
+                    previous = null;
+                    operator = null;
+                    newNumber = true;
+                    updateDisplay();
+                    return;
+                }
+                answer = a / b;
+            }
+
+            document.getElementById("history").textContent =
+                format(a) + " " + symbol(operator) + " " + format(b) + " =";
+
+            current = String(Number(answer.toPrecision(12)));
+            previous = null;
+            operator = null;
+            newNumber = true;
+
+            updateDisplay();
+        }
+
+        function symbol(op) {
+            if (op === "*") return "×";
+            if (op === "/") return "÷";
+            if (op === "+") return "+";
+            return "−";
+        }
+
+        function format(number) {
+            return String(number);
+        }
+
+        function clearAll() {
+            current = "0";
+            previous = null;
+            operator = null;
+            newNumber = false;
+
+            document.getElementById("history").textContent = "";
+            updateDisplay();
+        }
+
+        function deleteLast() {
+            if (current === "Error" || newNumber) {
+                current = "0";
+                newNumber = false;
+            } else {
+                current = current.slice(0, -1);
+                if (current === "" || current === "-") {
+                    current = "0";
+                }
+            }
+
+            updateDisplay();
+        }
+
+        function toggleSign() {
+            if (current === "Error") return;
+
+            if (Number(current) !== 0) {
+                current = String(-Number(current));
+            }
+
+            updateDisplay();
+        }
+
+        function percentage() {
+            if (current === "Error") return;
+
+            current = String(Number(current) / 100);
+            updateDisplay();
+        }
+    </script>
+
+</body>
+</html>
